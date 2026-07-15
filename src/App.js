@@ -65,7 +65,7 @@ import './App.css';
 import Ui from './components/Ui';
 import MainContent from './components/MainContent';
 import About from './components/About';
-import Contact from './components/Contact';
+import Sounds from './components/Sounds';
 import Search from './components/Search';
 
 function App() {
@@ -107,9 +107,6 @@ function App() {
 
     const observer = new IntersectionObserver(observerCallback, observerOptions);
 
-    // if (aboutRef.current) observer.observe(aboutRef.current);
-    // if (contactRef.current) observer.observe(contactRef.current);
-    // if (searchRef.current) observer.observe(searchRef.current);
     const aboutElement = aboutRef.current;
     const contactElement = contactRef.current;
     const searchElement = searchRef.current;
@@ -127,10 +124,6 @@ function App() {
     window.addEventListener('scroll', handleScroll);
 
     return () => {
-      // if (aboutRef.current) observer.unobserve(aboutRef.current);
-      // if (contactRef.current) observer.unobserve(contactRef.current);
-      // if (searchRef.current) observer.unobserve(searchRef.current);
-      // window.removeEventListener('scroll', handleScroll);
       if (aboutElement) observer.unobserve(aboutElement);
       if (contactElement) observer.unobserve(contactElement);
       if (searchElement) observer.unobserve(searchElement);
@@ -152,7 +145,7 @@ function App() {
           <About />
         </div>
         <div id="contact" ref={contactRef}>
-          <Contact />
+          <Sounds />
         </div>
         <div id="search" ref={searchRef}>
           <Search />

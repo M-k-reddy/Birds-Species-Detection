@@ -7,8 +7,8 @@
     gap: 3rem;
 }
 
-/* Header Card */
-.search-header-card {
+/* Wiki Search Box */
+.wiki-search-box {
     background: rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(16px) saturate(180%);
     border: 1px solid rgba(255, 255, 255, 0.15);
@@ -17,36 +17,116 @@
     text-align: center;
     color: #f1f3f5;
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
     animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.search-header-card h2 {
+.wiki-search-box h2 {
     font-size: 2.5rem;
     font-family: 'Outfit', sans-serif;
     background: linear-gradient(135deg, #a8e6cf 0%, #1de9b6 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin-bottom: 1rem;
+    margin: 0;
 }
 
-.search-header-card p {
+.wiki-search-box p {
     font-size: 1.1rem;
-    line-height: 1.6;
     color: #ced4da;
-    max-width: 800px;
-    margin: 0 auto;
+    max-width: 600px;
+    margin: 0;
 }
 
-/* Album Grid */
-.album-grid {
+/* Search Bar Wrapper */
+.search-bar-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+}
+
+.search-bar-icon {
+    position: absolute;
+    left: 1.2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #1de9b6;
+    font-size: 1.2rem;
+}
+
+.wiki-search-input {
+    width: 100%;
+    padding: 1rem 1.2rem 1rem 3.2rem;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(0, 0, 0, 0.2);
+    color: #ffffff;
+    font-size: 1.05rem;
+    outline: none;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+.wiki-search-input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.wiki-search-input:focus {
+    border-color: #1de9b6;
+    box-shadow: 0 0 15px rgba(29, 233, 182, 0.25);
+    background: rgba(0, 0, 0, 0.35);
+}
+
+/* Filter Chips */
+.filter-chips {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.filter-icon {
+    color: #1de9b6;
+    margin-right: 0.5rem;
+}
+
+.filter-chip {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 1.2rem;
+    border-radius: 20px;
+    color: #ced4da;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.filter-chip:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.filter-chip.active {
+    background: linear-gradient(135deg, #1de9b6 0%, #00b0ff 100%);
+    color: #ffffff;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(29, 233, 182, 0.35);
+}
+
+/* Grid */
+.wiki-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
     gap: 2.5rem;
     animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Album Card */
-.album-card {
+/* Card */
+.wiki-card {
     background: rgba(255, 255, 255, 0.06);
     backdrop-filter: blur(12px) saturate(180%);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -58,105 +138,121 @@
     flex-direction: column;
 }
 
-.album-card:hover {
+.wiki-card:hover {
     transform: translateY(-8px);
     border-color: rgba(255, 255, 255, 0.25);
     box-shadow: 0 16px 48px rgba(29, 233, 182, 0.15);
 }
 
 /* Image Wrapper */
-.card-image-wrapper {
+.wiki-image-wrapper {
     position: relative;
     height: 240px;
     width: 100%;
     overflow: hidden;
 }
 
-.bird-image {
+.wiki-bird-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.album-card:hover .bird-image {
+.wiki-card:hover .wiki-bird-image {
     transform: scale(1.05);
 }
 
-.card-mystery-overlay {
+/* Favorite button */
+.fav-btn {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 100%);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    backdrop-filter: blur(4px);
-    transition: all 0.4s ease;
-}
-
-.mystery-badge {
-    background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    padding: 0.4rem 1rem;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    color: #e9ecef;
-    font-weight: 500;
-}
-
-.reveal-btn {
-    background: linear-gradient(135deg, #1de9b6 0%, #00b0ff 100%);
-    border: none;
-    padding: 0.8rem 1.6rem;
-    border-radius: 25px;
+    top: 1.2rem;
+    right: 1.2rem;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
     color: #ffffff;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    box-shadow: 0 4px 15px rgba(29, 233, 182, 0.3);
+    justify-content: center;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
     transition: all 0.3s ease;
 }
 
-.reveal-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(29, 233, 182, 0.5);
+.fav-btn:hover {
+    transform: scale(1.1);
+    background: rgba(0, 0, 0, 0.6);
 }
 
-.eye-icon {
-    font-size: 1.1rem;
+.fav-btn.fav-active {
+    color: #ff6b6b;
+    background: rgba(255, 255, 255, 0.9);
+    border-color: transparent;
+    animation: heartPulse 0.4s ease-out;
+}
+
+@keyframes heartPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1.1); }
+}
+
+/* Rarity Tag */
+.rarity-tag {
+    position: absolute;
+    bottom: 1.2rem;
+    left: 1.2rem;
+    padding: 0.35rem 0.9rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    backdrop-filter: blur(4px);
+}
+
+.rarity-tag.critically-endangered {
+    background: rgba(255, 75, 75, 0.8);
+    color: #ffffff;
+    border: 1px solid rgba(255, 75, 75, 0.2);
+}
+
+.rarity-tag.endangered {
+    background: rgba(255, 145, 0, 0.8);
+    color: #ffffff;
+    border: 1px solid rgba(255, 145, 0, 0.2);
+}
+
+.rarity-tag.near-threatened {
+    background: rgba(253, 216, 53, 0.85);
+    color: #000000;
+    border: 1px solid rgba(253, 216, 53, 0.2);
+}
+
+.rarity-tag.least-concern {
+    background: rgba(29, 233, 182, 0.85);
+    color: #000000;
+    border: 1px solid rgba(29, 233, 182, 0.2);
 }
 
 /* Card Content */
-.card-content {
+.wiki-content {
     padding: 1.8rem;
     display: flex;
     flex-direction: column;
     gap: 0.8rem;
     flex-grow: 1;
-    transition: filter 0.5s ease;
 }
 
-.card-content.blurred {
-    filter: blur(5px);
-    pointer-events: none;
-    user-select: none;
-}
-
-.card-header-row {
+.wiki-header-row {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
 }
 
-.bird-name {
+.wiki-name {
     font-size: 1.4rem;
     font-family: 'Outfit', sans-serif;
     color: #f8f9fa;
@@ -164,93 +260,91 @@
     margin: 0;
 }
 
-.bird-origin {
-    font-size: 0.85rem;
-    background: rgba(255, 255, 255, 0.08);
-    padding: 0.3rem 0.8rem;
-    border-radius: 12px;
-    color: #a8e6cf;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+.wiki-category {
+    font-size: 0.8rem;
+    background: rgba(29, 233, 182, 0.1);
+    color: #1de9b6;
+    padding: 0.2rem 0.6rem;
+    border-radius: 8px;
+    border: 1px solid rgba(29, 233, 182, 0.2);
 }
 
-.bird-scientific {
-    font-size: 0.95rem;
+.wiki-scientific {
+    font-size: 0.9rem;
     font-style: italic;
+    color: #adb5bd;
+    margin-top: -0.3rem;
+}
+
+/* Quick Facts Sheet */
+.wiki-quick-facts {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    margin: 0.4rem 0;
+}
+
+.fact-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.88rem;
+}
+
+.fact-item strong {
     color: #adb5bd;
 }
 
-/* Rarity Badges */
-.rarity-badge {
-    align-self: flex-start;
-    padding: 0.3rem 0.9rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.rarity-badge.critically-endangered {
-    background: rgba(255, 75, 75, 0.15);
-    color: #ff6b6b;
-    border: 1px solid rgba(255, 75, 75, 0.3);
-}
-
-.rarity-badge.endangered {
-    background: rgba(255, 145, 0, 0.15);
-    color: #ffd166;
-    border: 1px solid rgba(255, 145, 0, 0.3);
-}
-
-.rarity-badge.near-threatened {
-    background: rgba(253, 216, 53, 0.12);
-    color: #ffe082;
-    border: 1px solid rgba(253, 216, 53, 0.25);
-}
-
-.rarity-badge.least-concern-\(highly-elusive\) {
-    background: rgba(29, 233, 182, 0.15);
-    color: #1de9b6;
-    border: 1px solid rgba(29, 233, 182, 0.3);
-}
-
-.bird-description {
-    font-size: 0.95rem;
-    line-height: 1.5;
-    color: #ced4da;
-    margin: 0;
-}
-
-.bird-fact {
-    background: rgba(29, 233, 182, 0.05);
-    border-left: 3px solid #1de9b6;
-    padding: 0.8rem 1rem;
-    border-radius: 0 12px 12px 0;
-    font-size: 0.9rem;
-    line-height: 1.4;
+.fact-item span {
     color: #e9ecef;
 }
 
-.hide-btn {
-    align-self: flex-end;
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 0.5rem 1rem;
-    border-radius: 15px;
-    color: #ced4da;
-    cursor: pointer;
-    font-size: 0.85rem;
+/* Fact Box */
+.wiki-fact-box {
+    background: rgba(0, 176, 255, 0.05);
+    border-left: 3px solid #00b0ff;
+    padding: 0.8rem 1rem;
+    border-radius: 0 12px 12px 0;
+    font-size: 0.88rem;
+    line-height: 1.4;
+    color: #e9ecef;
+    margin: 0;
+}
+
+/* Footer / Map Marker */
+.wiki-footer {
     display: flex;
     align-items: center;
     gap: 0.4rem;
-    transition: all 0.3s ease;
-    margin-top: 0.5rem;
-    pointer-events: auto;
+    margin-top: auto;
+    font-size: 0.85rem;
+    color: #adb5bd;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 0.8rem;
 }
 
-.hide-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: #ffffff;
-    border-color: rgba(255, 255, 255, 0.4);
+.map-marker {
+    color: #ff6b6b;
+}
+
+/* No results state */
+.wiki-no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 24px;
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    color: #ced4da;
+}
+
+.wiki-no-results h3 {
+    font-size: 1.3rem;
+    color: #f8f9fa;
+    margin-bottom: 0.5rem;
 }
 
 /* Animations */

@@ -60,7 +60,7 @@ function Ui({ currentSection, setCurrentSection }) {
             onClick={() => setCurrentSection('contact')}
             className={currentSection === 'contact' ? 'active-link' : ''}
           >
-            Contact
+            Bird Calls
           </a>
         </li>
         <li>
@@ -69,7 +69,7 @@ function Ui({ currentSection, setCurrentSection }) {
             onClick={() => setCurrentSection('search')}
             className={currentSection === 'search' ? 'active-link' : ''}
           >
-            Search
+            Bird Wiki
           </a>
         </li>
       </ul>

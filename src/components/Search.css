@@ -1,48 +1,277 @@
 .search-container {
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 120px 24px 60px;
+    padding: 3rem 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
 }
 
-.search-card {
-  width: 100%;
-  max-width: 600px;
-  background: rgba(255, 255, 255, 0.45);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-  padding: 48px;
-  box-shadow: var(--glass-shadow);
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  text-align: center;
+/* Header Card */
+.search-header-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 24px;
+    padding: 2.5rem;
+    text-align: center;
+    color: #f1f3f5;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+    animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.search-card h2 {
-  font-size: 32px;
-  margin-bottom: 8px;
-  border-bottom: 2px solid rgba(46, 98, 49, 0.15);
-  padding-bottom: 12px;
+.search-header-card h2 {
+    font-size: 2.5rem;
+    font-family: 'Outfit', sans-serif;
+    background: linear-gradient(135deg, #a8e6cf 0%, #1de9b6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1rem;
 }
 
-.search-card p {
-  font-size: 16px;
-  line-height: 1.6;
-  color: var(--text-secondary);
-  margin: 0;
+.search-header-card p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #ced4da;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
-@media (max-width: 600px) {
-  .search-card {
-    padding: 32px 24px;
-  }
-  .search-card h2 {
-    font-size: 26px;
-  }
+/* Album Grid */
+.album-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 2.5rem;
+    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Album Card */
+.album-card {
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+}
+
+.album-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 16px 48px rgba(29, 233, 182, 0.15);
+}
+
+/* Image Wrapper */
+.card-image-wrapper {
+    position: relative;
+    height: 240px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.bird-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.album-card:hover .bird-image {
+    transform: scale(1.05);
+}
+
+.card-mystery-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    backdrop-filter: blur(4px);
+    transition: all 0.4s ease;
+}
+
+.mystery-badge {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: #e9ecef;
+    font-weight: 500;
+}
+
+.reveal-btn {
+    background: linear-gradient(135deg, #1de9b6 0%, #00b0ff 100%);
+    border: none;
+    padding: 0.8rem 1.6rem;
+    border-radius: 25px;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 15px rgba(29, 233, 182, 0.3);
+    transition: all 0.3s ease;
+}
+
+.reveal-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(29, 233, 182, 0.5);
+}
+
+.eye-icon {
+    font-size: 1.1rem;
+}
+
+/* Card Content */
+.card-content {
+    padding: 1.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    flex-grow: 1;
+    transition: filter 0.5s ease;
+}
+
+.card-content.blurred {
+    filter: blur(5px);
+    pointer-events: none;
+    user-select: none;
+}
+
+.card-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.bird-name {
+    font-size: 1.4rem;
+    font-family: 'Outfit', sans-serif;
+    color: #f8f9fa;
+    font-weight: 700;
+    margin: 0;
+}
+
+.bird-origin {
+    font-size: 0.85rem;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 0.3rem 0.8rem;
+    border-radius: 12px;
+    color: #a8e6cf;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.bird-scientific {
+    font-size: 0.95rem;
+    font-style: italic;
+    color: #adb5bd;
+}
+
+/* Rarity Badges */
+.rarity-badge {
+    align-self: flex-start;
+    padding: 0.3rem 0.9rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.rarity-badge.critically-endangered {
+    background: rgba(255, 75, 75, 0.15);
+    color: #ff6b6b;
+    border: 1px solid rgba(255, 75, 75, 0.3);
+}
+
+.rarity-badge.endangered {
+    background: rgba(255, 145, 0, 0.15);
+    color: #ffd166;
+    border: 1px solid rgba(255, 145, 0, 0.3);
+}
+
+.rarity-badge.near-threatened {
+    background: rgba(253, 216, 53, 0.12);
+    color: #ffe082;
+    border: 1px solid rgba(253, 216, 53, 0.25);
+}
+
+.rarity-badge.least-concern-\(highly-elusive\) {
+    background: rgba(29, 233, 182, 0.15);
+    color: #1de9b6;
+    border: 1px solid rgba(29, 233, 182, 0.3);
+}
+
+.bird-description {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #ced4da;
+    margin: 0;
+}
+
+.bird-fact {
+    background: rgba(29, 233, 182, 0.05);
+    border-left: 3px solid #1de9b6;
+    padding: 0.8rem 1rem;
+    border-radius: 0 12px 12px 0;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    color: #e9ecef;
+}
+
+.hide-btn {
+    align-self: flex-end;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: 15px;
+    color: #ced4da;
+    cursor: pointer;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.3s ease;
+    margin-top: 0.5rem;
+    pointer-events: auto;
+}
+
+.hide-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Animations */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

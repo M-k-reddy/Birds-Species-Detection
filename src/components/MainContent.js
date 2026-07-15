@@ -112,7 +112,7 @@ const MainContent = () => {
                         <div className="loading-card">
                             <FaSpinner className="spinner-icon" />
                             <h3>Analyzing Avian Pixels...</h3>
-                            <p>Running local ONNX model classification</p>
+                            <p>Running local two-stage hybrid model classification</p>
                         </div>
                     )}
 

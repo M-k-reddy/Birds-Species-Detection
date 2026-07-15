@@ -80,7 +80,12 @@ def detect_bird_species(image_path):
             detected_species = top_prediction["label"].split(',')[0].strip().title()
             confidence = top_prediction["score"]
             print(f"[INFO] Local offline classification result: {detected_species} (confidence: {confidence:.2f})")
-            return [detected_species]
+            
+            # If the model is not very confident, let the user know and provide guidance
+            if confidence < 0.35:
+                return [f"{detected_species} (Low Confidence: {confidence*100:.1f}% - Make sure the bird is centered & clear)"]
+            else:
+                return [detected_species]
         
     except Exception as e:
         print(f"[ERROR] Failed to run local offline classifier: {e}")

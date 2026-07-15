@@ -60,7 +60,7 @@ function Ui({ currentSection, setCurrentSection }) {
             onClick={() => setCurrentSection('contact')}
             className={currentSection === 'contact' ? 'active-link' : ''}
           >
-            Bird Quiz
+            Bird Journal
           </a>
         </li>
         <li>

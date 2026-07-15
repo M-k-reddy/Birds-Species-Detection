@@ -65,7 +65,7 @@ import './App.css';
 import Ui from './components/Ui';
 import MainContent from './components/MainContent';
 import About from './components/About';
-import Quiz from './components/Quiz';
+import Journal from './components/Journal';
 import Search from './components/Search';
 
 function App() {
@@ -133,7 +133,7 @@ function App() {
 
   return (
     <div className="App" style={{
-      backgroundImage: "linear-gradient(135deg, rgba(10, 25, 20, 0.92) 0%, rgba(15, 23, 42, 0.96) 100%), url('/webbird.jpg')",
+      backgroundImage: "linear-gradient(135deg, #f0f7f4 0%, #e9f2f9 100%)",
       backgroundSize: "cover",
       backgroundAttachment: "fixed",
       backgroundPosition: "center"
@@ -145,7 +145,7 @@ function App() {
           <About />
         </div>
         <div id="contact" ref={contactRef}>
-          <Quiz />
+          <Journal />
         </div>
         <div id="search" ref={searchRef}>
           <Search />

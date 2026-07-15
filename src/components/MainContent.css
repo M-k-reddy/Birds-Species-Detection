@@ -304,13 +304,58 @@
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: var(--transition-smooth);
-  box-shadow: 0 4px 12px rgba(30, 63, 32, 0.15);
+  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.2);
 }
 
 .reset-button:hover {
   background: var(--primary-light);
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(30, 63, 32, 0.25);
+  box-shadow: 0 6px 16px rgba(13, 148, 136, 0.3);
+}
+
+.button-group-row {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.button-group-row .reset-button,
+.button-group-row .save-journal-btn {
+  flex: 1;
+}
+
+.save-journal-btn {
+  background: linear-gradient(135deg, #0d9488 0%, #0284c7 100%);
+  color: #ffffff;
+  border: none;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  padding: 14px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.2);
+  transition: var(--transition-smooth);
+  text-align: center;
+}
+
+.save-journal-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(13, 148, 136, 0.35);
+}
+
+.save-journal-btn.saved {
+  background: #2ecc71 !important;
+  box-shadow: 0 4px 12px rgba(46, 204, 113, 0.2) !important;
+  cursor: default;
+  color: #ffffff !important;
+}
+
+.save-journal-btn:disabled:not(.saved) {
+  background: #e2e8f0 !important;
+  color: #94a3b8 !important;
+  box-shadow: none !important;
+  cursor: not-allowed;
 }
 
 /* Animations */

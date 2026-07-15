@@ -67,11 +67,11 @@
 
 .nav-links a:hover {
   color: var(--primary-light);
-  background: rgba(46, 98, 49, 0.08);
+  background: rgba(13, 148, 136, 0.08);
 }
 
 .nav-links a.active-link {
   color: #ffffff;
   background: var(--primary);
-  box-shadow: 0 4px 12px rgba(30, 63, 32, 0.2);
+  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.2);
 }

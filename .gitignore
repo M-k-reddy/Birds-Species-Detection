@@ -1,0 +1,37 @@
+# Node dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python dependencies & environments
+.venv/
+venv/
+ENV/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Local downloaded ML assets
+backend/mobilenetv2-7.onnx
+backend/imagenet_classes.txt
+
+# React build output
+build/
+
+# Local configuration / secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+service_account_key.json
+backend/service_account_key.json
+
+# IDEs & System files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

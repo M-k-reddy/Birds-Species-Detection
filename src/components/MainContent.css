@@ -4,55 +4,60 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 120px 24px 60px;
+  padding: 100px 0 0 0;
 }
 
-.hero-container {
+.split-layout-container {
   display: flex;
-  gap: 40px;
   width: 100%;
-  max-width: 1100px;
+  min-height: calc(100vh - 100px);
   align-items: stretch;
 }
 
-/* Hero Info Card */
-.hero-text-card {
-  flex: 1.2;
-  background: rgba(255, 255, 255, 0.45);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-  padding: 48px;
+.left-column {
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  box-shadow: var(--glass-shadow);
+  padding: 4rem;
+  gap: 2.5rem;
+  z-index: 10;
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+.right-column {
+  flex: 1.2;
   position: relative;
   overflow: hidden;
 }
 
-.hero-text-card::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(46, 98, 49, 0.04) 0%, transparent 60%);
-  pointer-events: none;
+.hero-bird-image-cover {
+  width: 100%;
+  height: 100%;
+  background-image: url('/hero_bird.jpg');
+  background-size: cover;
+  background-position: center;
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.04);
+}
+
+.hero-text-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
 }
 
 .badge {
   align-self: flex-start;
-  background: rgba(46, 98, 49, 0.1);
-  color: var(--primary-light);
+  background: linear-gradient(135deg, rgba(13, 148, 136, 0.1) 0%, rgba(2, 132, 199, 0.1) 100%);
+  color: var(--primary);
   font-family: var(--font-display);
   font-size: 13px;
   font-weight: 600;
   padding: 6px 14px;
   border-radius: 30px;
-  margin-bottom: 24px;
+  border: 1px solid rgba(13, 148, 136, 0.2);
+  margin-bottom: 8px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -62,36 +67,17 @@
   font-weight: 800;
   line-height: 1.1;
   letter-spacing: -1.5px;
-  margin-bottom: 12px;
-}
-
-.hero-subtitle-container {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 24px;
+  margin-bottom: 4px;
+  background: linear-gradient(135deg, #0f766e 0%, #0284c7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .hero-subtitle {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 500;
   color: var(--text-secondary);
   margin: 0;
-}
-
-.icons-row {
-  display: flex;
-  gap: 12px;
-  color: var(--primary-light);
-  font-size: 20px;
-}
-
-.icon-bird {
-  animation: bounce 3s infinite ease-in-out;
-}
-
-.icon-camera {
-  opacity: 0.8;
 }
 
 .hero-quote {
@@ -105,8 +91,8 @@
 
 /* Upload & Results Card */
 .interactive-card {
-  flex: 1;
-  background: rgba(255, 255, 255, 0.5);
+  width: 100%;
+  background: var(--glass-bg);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
@@ -115,7 +101,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  min-height: 400px;
+  min-height: 380px;
 }
 
 /* Upload Zone */

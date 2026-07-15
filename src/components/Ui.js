@@ -54,15 +54,7 @@ function Ui({ currentSection, setCurrentSection }) {
             About
           </a>
         </li>
-        <li>
-          <a
-            href="#contact"
-            onClick={() => setCurrentSection('contact')}
-            className={currentSection === 'contact' ? 'active-link' : ''}
-          >
-            Bird Journal
-          </a>
-        </li>
+
         <li>
           <a
             href="#search"

@@ -9,11 +9,9 @@ const MainContent = () => {
     const [imageUrl, setImageUrl] = useState('');
     const [loading, setLoading] = useState(false);
     const [dragActive, setDragActive] = useState(false);
-    const [saved, setSaved] = useState(false);
 
     const uploadFile = async (file) => {
         setLoading(true);
-        setSaved(false);
         const formData = new FormData();
         formData.append('image', file);
 
@@ -68,29 +66,6 @@ const MainContent = () => {
         setFileUploaded(false);
         setSpecies('');
         setImageUrl('');
-        setSaved(false);
-    };
-
-    const handleSaveToJournal = () => {
-        try {
-            const stored = localStorage.getItem("avian_sightings");
-            const sightingsList = stored ? JSON.parse(stored) : [];
-            
-            const newSighting = {
-                id: Date.now(),
-                name: species,
-                date: new Date().toISOString().split('T')[0],
-                location: "Identified via AI Upload",
-                notes: "Spotted and identified using the offline AI Bird Species Detector.",
-                image: `http://localhost:5000/${imageUrl}`
-            };
-            
-            localStorage.setItem("avian_sightings", JSON.stringify([newSighting, ...sightingsList]));
-            setSaved(true);
-            alert(`${species} has been saved to your Bird Journal!`);
-        } catch (error) {
-            console.error("Error saving sighting to journal:", error);
-        }
     };
 
     return (
@@ -161,18 +136,9 @@ const MainContent = () => {
                                     <span className="result-value">{species}</span>
                                 </div>
 
-                                <div className="button-group-row">
-                                    <button className="reset-button" onClick={handleClose}>
-                                        Identify Another
-                                    </button>
-                                    <button 
-                                        className={`save-journal-btn ${saved ? 'saved' : ''}`}
-                                        onClick={handleSaveToJournal}
-                                        disabled={saved || species.startsWith("Not a Bird")}
-                                    >
-                                        {saved ? "Saved!" : "Save Sighting"}
-                                    </button>
-                                </div>
+                                <button className="reset-button" onClick={handleClose}>
+                                    Identify Another Bird
+                                </button>
                             </div>
                         )}
                     </div>

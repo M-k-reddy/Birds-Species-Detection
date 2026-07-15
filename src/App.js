@@ -65,7 +65,6 @@ import './App.css';
 import Ui from './components/Ui';
 import MainContent from './components/MainContent';
 import About from './components/About';
-import Journal from './components/Journal';
 import Search from './components/Search';
 
 function App() {
@@ -146,9 +145,6 @@ function App() {
         <MainContent />
         <div id="about" ref={aboutRef}>
           <About />
-        </div>
-        <div id="contact" ref={contactRef}>
-          <Journal />
         </div>
         <div id="search" ref={searchRef}>
           <Search />

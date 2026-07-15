@@ -24,4 +24,5 @@ def upload_image():
     return jsonify({"error": "No image uploaded"}), 400
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    # Disable the reloader to avoid repeated restarts caused by filesystem changes
+    app.run(debug=False, use_reloader=False)

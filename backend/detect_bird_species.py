@@ -3,7 +3,13 @@ import urllib.request
 import numpy as np
 from PIL import Image
 import onnxruntime as ort
-from google.cloud import vision
+
+# Google Cloud Vision is optional — only imported if credentials are present
+try:
+    from google.cloud import vision as gcloud_vision
+    _gcloud_available = True
+except ImportError:
+    _gcloud_available = False
 
 # Cache for local pipeline to avoid loading the model on every request
 _classifier = None
@@ -121,16 +127,16 @@ def detect_bird_species(image_path):
     """Detects bird species from an image using Google Cloud Vision API with offline HF pipeline fallback"""
     creds_path = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
     
-    # 1. Try Google Cloud Vision API if credentials are configured
-    if creds_path and os.path.exists(creds_path) and os.path.getsize(creds_path) > 10:
+    # 1. Try Google Cloud Vision API if credentials are configured and library available
+    if _gcloud_available and creds_path and os.path.exists(creds_path) and os.path.getsize(creds_path) > 10:
         try:
-            client = vision.ImageAnnotatorClient()
+            client = gcloud_vision.ImageAnnotatorClient()
 
             # Read the image file
             with open(image_path, "rb") as image_file:
                 content = image_file.read()
 
-            image = vision.Image(content=content)
+            image = gcloud_vision.Image(content=content)
             response = client.object_localization(image=image)
 
             # Handle potential API errors

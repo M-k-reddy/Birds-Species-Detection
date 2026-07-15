@@ -1,7 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaDove, FaCamera, FaCloudUploadAlt, FaTimes, FaSpinner } from 'react-icons/fa';
 import axios from 'axios';
 import './MainContent.css';
+
+// Curated list of 10 breathtaking, high-contrast, colorful bird images from Wikipedia's public CDN
+const BIRD_IMAGES = [
+    "/hero_bird.jpg", // Start with our gorgeous generated Cedar Waxwing berry image
+    "https://upload.wikimedia.org/wikipedia/commons/c/cc/Common_kingfisher_Alcedo_atthis.jpg", // Common Kingfisher
+    "https://upload.wikimedia.org/wikipedia/commons/e/e4/Pharomachrus_mocinno_-Costa_Rica-8.jpg", // Resplendent Quetzal
+    "https://upload.wikimedia.org/wikipedia/commons/9/9e/Aix_galericulata_-_Richmond_Park_-_London.jpg", // Mandarin Duck
+    "https://upload.wikimedia.org/wikipedia/commons/c/c4/Puffin_Latrabjarg_Iceland.jpg", // Atlantic Puffin
+    "https://upload.wikimedia.org/wikipedia/commons/c/c5/Peacock_Plumage.jpg", // Indian Peafowl
+    "https://upload.wikimedia.org/wikipedia/commons/5/53/Chrysolophus_pictus_-_Cincinnati_Zoo.jpg", // Golden Pheasant
+    "https://upload.wikimedia.org/wikipedia/commons/5/51/Red-crested_Cardinal_on_Hawaii.jpg", // Red-crested Cardinal
+    "https://upload.wikimedia.org/wikipedia/commons/b/b8/Flickr_-_Koshy_Koshy_-_Flamingos.jpg", // Greater Flamingo
+    "https://upload.wikimedia.org/wikipedia/commons/b/b3/Lilac-breasted_roller_%28Coracias_caudatus%29_crop.jpg" // Lilac-breasted Roller
+];
 
 const MainContent = () => {
     const [fileUploaded, setFileUploaded] = useState(false);
@@ -9,6 +23,22 @@ const MainContent = () => {
     const [imageUrl, setImageUrl] = useState('');
     const [loading, setLoading] = useState(false);
     const [dragActive, setDragActive] = useState(false);
+
+    // States for rotating background bird images
+    const [bgIndex, setBgIndex] = useState(0);
+    const [fadeIn, setFadeIn] = useState(true);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setFadeIn(false);
+            setTimeout(() => {
+                setBgIndex((prevIndex) => (prevIndex + 1) % BIRD_IMAGES.length);
+                setFadeIn(true);
+            }, 800); // 800ms transition time
+        }, 15000); // Change image every 15 seconds
+
+        return () => clearInterval(interval);
+    }, []);
 
     const uploadFile = async (file) => {
         setLoading(true);
@@ -144,9 +174,12 @@ const MainContent = () => {
                     </div>
                 </div>
 
-                {/* Right Side: Beautiful Crisp Bird Background Image */}
+                {/* Right Side: Beautiful Rotating Bird Background Image */}
                 <div className="right-column">
-                    <div className="hero-bird-image-cover" style={{ backgroundImage: "url('/hero_bird.jpg')" }}></div>
+                    <div 
+                        className={`hero-bird-image-cover ${fadeIn ? 'fade-in' : ''}`} 
+                        style={{ backgroundImage: `url('${BIRD_IMAGES[bgIndex]}')` }}
+                    ></div>
                 </div>
             </div>
         </div>

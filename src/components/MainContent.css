@@ -38,6 +38,12 @@
   background-size: cover;
   background-position: center;
   box-shadow: -10px 0 30px rgba(0, 0, 0, 0.04);
+  transition: opacity 0.8s ease-in-out;
+  opacity: 0;
+}
+
+.hero-bird-image-cover.fade-in {
+  opacity: 1;
 }
 
 .hero-text-content {

@@ -7,13 +7,10 @@ werkzeug==2.3.7
 Pillow==10.3.0
 numpy==1.26.4
 
-# ONNX Runtime (Stage 1 - MobileNetV2 bird verifier)
+# Stage 1 — MobileNetV2 bird verifier (ONNX Runtime)
 onnxruntime==1.18.0
 
-# Hugging Face (Stage 2 - 525 species fine-grained classifier)
+# Stage 2 — 525-species fine-grained bird classifier (HuggingFace)
 transformers==4.41.2
 torch==2.3.0
 torchvision==0.18.0
-
-# Optional: Google Cloud Vision (only needed if using Vision API)
-# google-cloud-vision==3.4.2

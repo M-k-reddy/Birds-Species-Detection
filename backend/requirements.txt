@@ -11,6 +11,6 @@ numpy==1.26.4
 onnxruntime==1.18.0
 
 # Stage 2 — 525-species fine-grained bird classifier (HuggingFace)
-transformers==4.41.2
-torch==2.3.0
-torchvision==0.18.0
+transformers==5.13.1
+torch==2.5.0
+soxr==1.1.0

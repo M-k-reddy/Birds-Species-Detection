@@ -1,192 +1,158 @@
 import React, { useState } from 'react';
-import { FaSearch, FaMapMarkerAlt, FaHeart, FaFilter } from 'react-icons/fa';
+import { FaSearch, FaMapMarkerAlt, FaHeart, FaSpinner, FaBookOpen } from 'react-icons/fa';
+import axios from 'axios';
 import './Search.css';
-
-const BIRD_DATABASE = [
-    {
-        name: "Philippine Eagle",
-        scientific: "Pithecophaga jefferyi",
-        category: "Raptors",
-        rarity: "Critically Endangered",
-        habitat: "Tropical Rainforests",
-        diet: "Monkeys, Lemurs, Snakes",
-        lifespan: "30-40 years",
-        origin: "Mindanao, Samar, Luzon",
-        fact: "Also known as the monkey-eating eagle, it has a shaggy crest and blue-grey eyes, with a massive wingspan.",
-        image: "http://localhost:5000/static/images/philippine_eagle.jpg"
-    },
-    {
-        name: "Resplendent Quetzal",
-        scientific: "Pharomachrus mocinno",
-        category: "Forest Birds",
-        rarity: "Near Threatened",
-        habitat: "Cloud Forests",
-        diet: "Wild Avocados, Fruits, Insects",
-        lifespan: "10-15 years",
-        origin: "Central America",
-        fact: "Sacred to ancient Mayans, males grow twin tail feathers up to 3 feet long that stream behind them in flight.",
-        image: "http://localhost:5000/static/images/resplendent_quetzal.jpg"
-    },
-    {
-        name: "Kakapo",
-        scientific: "Strigops habroptilus",
-        category: "Parrots",
-        rarity: "Critically Endangered",
-        origin: "New Zealand",
-        habitat: "Subalpine Scrublands",
-        diet: "Seeds, Fruits, Plants",
-        lifespan: "60-95 years",
-        fact: "The world's only flightless parrot. Nocturnal and heavy, it emits a sweet, musty odor to find other birds.",
-        image: "http://localhost:5000/static/images/kakapo.jpg"
-    },
-    {
-        name: "Marvelous Spatuletail",
-        scientific: "Loddigesia mirabilis",
-        category: "Hummingbirds",
-        rarity: "Endangered",
-        origin: "Andes Mountains (Peru)",
-        habitat: "Forest Edges & Scrub",
-        diet: "Flower Nectar, Tiny Insects",
-        lifespan: "3-5 years",
-        fact: "Has only 4 tail feathers. The male's outer tail feathers end in large, brilliant-blue discs (spatules).",
-        image: "http://localhost:5000/static/images/marvelous_spatuletail.jpg"
-    },
-    {
-        name: "Ribbon-tailed Astrapia",
-        scientific: "Astrapia mayeri",
-        category: "Forest Birds",
-        rarity: "Near Threatened",
-        origin: "Papua New Guinea",
-        habitat: "Montane Rainforests",
-        diet: "Fruits, Frogs, Insects",
-        lifespan: "15-20 years",
-        fact: "Males have the longest tail feathers in relation to body size of any bird—over three times their body length.",
-        image: "http://localhost:5000/static/images/ribbon_tailed_astrapia.jpg"
-    },
-    {
-        name: "King of Saxony Bird-of-Paradise",
-        scientific: "Pteridophora alberti",
-        category: "Forest Birds",
-        rarity: "Least Concern",
-        origin: "New Guinea",
-        habitat: "High Altitude Forests",
-        diet: "Berries, Arthropods",
-        lifespan: "10-15 years",
-        fact: "Famous for its two long, bizarre, enamel-blue head plumes that it can move independently at will.",
-        image: "http://localhost:5000/static/images/king_of_saxony.jpg"
-    }
-];
-
-const CATEGORIES = ["All", "Raptors", "Forest Birds", "Parrots", "Hummingbirds"];
 
 const Search = () => {
     const [searchQuery, setSearchQuery] = useState("");
-    const [selectedCategory, setSelectedCategory] = useState("All");
+    const [searchResults, setSearchResults] = useState([]);
+    const [loading, setLoading] = useState(false);
     const [favorites, setFavorites] = useState({});
 
-    const toggleFavorite = (index) => {
+    const toggleFavorite = (title) => {
         setFavorites(prev => ({
             ...prev,
-            [index]: !prev[index]
+            [title]: !prev[title]
         }));
     };
 
-    const filteredBirds = BIRD_DATABASE.filter(bird => {
-        const matchesSearch = bird.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                             bird.scientific.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                             bird.origin.toLowerCase().includes(searchQuery.toLowerCase());
-        const matchesCategory = selectedCategory === "All" || bird.category === selectedCategory;
-        return matchesSearch && matchesCategory;
-    });
+    const handleSearchSubmit = async (e) => {
+        e.preventDefault();
+        if (!searchQuery.trim()) return;
+
+        setLoading(true);
+        setSearchResults([]);
+
+        try {
+            // Step 1: Query Wikipedia Search API for matching bird pages
+            // Append "bird" to the query to ensure search returns avian species
+            const searchQueryStr = searchQuery.toLowerCase().includes("bird") ? searchQuery : `${searchQuery} bird`;
+            const searchResponse = await axios.get(`https://en.wikipedia.org/w/api.php`, {
+                params: {
+                    action: 'query',
+                    list: 'search',
+                    srsearch: searchQueryStr,
+                    utf8: 1,
+                    format: 'json',
+                    origin: '*'
+                }
+            });
+
+            const searchItems = searchResponse.data?.query?.search || [];
+            if (searchItems.length === 0) {
+                setSearchResults([]);
+                setLoading(false);
+                return;
+            }
+
+            // Step 2: Fetch summaries for the top 5 pages in parallel
+            const summaryPromises = searchItems.slice(0, 5).map(async (item) => {
+                try {
+                    const pageTitle = item.title.replace(/\s+/g, '_');
+                    const summaryResponse = await axios.get(`https://en.wikipedia.org/api/rest_v1/page/summary/${pageTitle}`);
+                    const data = summaryResponse.data;
+                    
+                    // We only want pages that have a valid thumbnail or image to show
+                    if (data && data.originalimage && data.originalimage.source) {
+                        return {
+                            title: data.title,
+                            displayTitle: data.displaytitle || data.title,
+                            description: data.description || "Bird species",
+                            extract: data.extract,
+                            image: data.originalimage.source,
+                            url: data.content_urls?.desktop?.page || `https://en.wikipedia.org/wiki/${pageTitle}`
+                        };
+                    }
+                } catch (err) {
+                    return null; // Ignore failed individual fetches
+                }
+                return null;
+            });
+
+            const results = await Promise.all(summaryPromises);
+            // Filter out null responses
+            const finalResults = results.filter(r => r !== null);
+            setSearchResults(finalResults);
+
+        } catch (error) {
+            console.error("Error fetching real-time search results:", error);
+            alert("Failed to fetch search results. Please check your internet connection.");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className="search-container">
             <div className="wiki-search-box">
-                <h2>Avian Wiki Catalog</h2>
-                <p>Explore high-fidelity profiles of rare, endangered, and unique birds from across the globe.</p>
+                <h2>Real-Time Avian Search Engine</h2>
+                <p>Search for any bird species on Earth. The search engine queries Wikipedia dynamically in real-time to fetch photos, facts, and scientific descriptions.</p>
                 
-                <div className="search-bar-wrapper">
+                <form onSubmit={handleSearchSubmit} className="search-bar-wrapper">
                     <FaSearch className="search-bar-icon" />
                     <input 
                         type="text" 
-                        placeholder="Search by name, scientific name, or region..."
+                        placeholder="Type a bird species (e.g. Eagle, Falcon, Owl, Hummingbird)..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="wiki-search-input"
                     />
-                </div>
-
-                <div className="filter-chips">
-                    <FaFilter className="filter-icon" />
-                    {CATEGORIES.map(cat => (
-                        <button 
-                            key={cat} 
-                            className={`filter-chip ${selectedCategory === cat ? 'active' : ''}`}
-                            onClick={() => setSelectedCategory(cat)}
-                        >
-                            {cat}
-                        </button>
-                    ))}
-                </div>
+                    <button type="submit" className="wiki-search-btn">Search</button>
+                </form>
             </div>
 
-            <div className="wiki-grid">
-                {filteredBirds.map((bird, index) => {
-                    const isFav = favorites[index];
-                    return (
-                        <div key={index} className="wiki-card">
-                            <div className="wiki-image-wrapper">
-                                <img src={bird.image} alt={bird.name} className="wiki-bird-image" />
-                                <button 
-                                    className={`fav-btn ${isFav ? 'fav-active' : ''}`}
-                                    onClick={() => toggleFavorite(index)}
-                                >
-                                    <FaHeart />
-                                </button>
-                                <span className={`rarity-tag ${bird.rarity.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}>
-                                    {bird.rarity}
-                                </span>
-                            </div>
+            {loading && (
+                <div className="wiki-loading-state">
+                    <FaSpinner className="wiki-spinner-icon" />
+                    <h3>Searching Avian Databases...</h3>
+                    <p>Fetching real-time species profiles & images</p>
+                </div>
+            )}
 
-                            <div className="wiki-content">
-                                <div className="wiki-header-row">
-                                    <h3 className="wiki-name">{bird.name}</h3>
-                                    <span className="wiki-category">{bird.category}</span>
-                                </div>
-                                <span className="wiki-scientific">{bird.scientific}</span>
-                                
-                                <div className="wiki-quick-facts">
-                                    <div className="fact-item">
-                                        <strong>Habitat:</strong> <span>{bird.habitat}</span>
-                                    </div>
-                                    <div className="fact-item">
-                                        <strong>Diet:</strong> <span>{bird.diet}</span>
-                                    </div>
-                                    <div className="fact-item">
-                                        <strong>Lifespan:</strong> <span>{bird.lifespan}</span>
-                                    </div>
+            {!loading && (
+                <div className="wiki-grid">
+                    {searchResults.map((bird, index) => {
+                        const isFav = favorites[bird.title];
+                        return (
+                            <div key={index} className="wiki-card">
+                                <div className="wiki-image-wrapper">
+                                    <img src={bird.image} alt={bird.title} className="wiki-bird-image" />
+                                    <button 
+                                        className={`fav-btn ${isFav ? 'fav-active' : ''}`}
+                                        onClick={() => toggleFavorite(bird.title)}
+                                    >
+                                        <FaHeart />
+                                    </button>
                                 </div>
 
-                                <p className="wiki-fact-box">
-                                    <strong>Fascinating Fact:</strong> {bird.fact}
-                                </p>
+                                <div className="wiki-content">
+                                    <div className="wiki-header-row">
+                                        <h3 className="wiki-name" dangerouslySetInnerHTML={{ __html: bird.displayTitle }}></h3>
+                                    </div>
+                                    <span className="wiki-scientific">{bird.description}</span>
+                                    
+                                    <p className="wiki-description-text">
+                                        {bird.extract}
+                                    </p>
 
-                                <div className="wiki-footer">
-                                    <FaMapMarkerAlt className="map-marker" />
-                                    <span className="wiki-location">{bird.origin}</span>
+                                    <div className="wiki-footer">
+                                        <a href={bird.url} target="_blank" rel="noopener noreferrer" className="wiki-learn-more-link">
+                                            <FaBookOpen /> Learn more on Wikipedia
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
+                        );
+                    })}
+
+                    {searchResults.length === 0 && !loading && searchQuery && (
+                        <div className="wiki-no-results">
+                            <h3>No real-time results found for "{searchQuery}"</h3>
+                            <p>Try searching another bird name or checking your spelling.</p>
                         </div>
-                    );
-                })}
-
-                {filteredBirds.length === 0 && (
-                    <div className="wiki-no-results">
-                        <h3>No birds found matching your search.</h3>
-                        <p>Try searching another keyword or clearing your filters.</p>
-                    </div>
-                )}
-            </div>
+                    )}
+                </div>
+            )}
         </div>
     );
 };

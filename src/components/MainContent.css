@@ -230,7 +230,7 @@
 }
 
 .close-btn {
-  background: rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0.08);
   border: none;
   width: 32px;
   height: 32px;
@@ -269,8 +269,8 @@
 }
 
 .result-details {
-  background: rgba(46, 98, 49, 0.06);
-  border: 1px solid rgba(46, 98, 49, 0.1);
+  background: var(--primary-glow);
+  border: 1px solid rgba(29, 233, 182, 0.25);
   border-radius: var(--radius-md);
   padding: 16px 20px;
   display: flex;

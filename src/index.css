@@ -2,25 +2,25 @@
   --font-display: 'Outfit', sans-serif;
   --font-body: 'Inter', sans-serif;
 
-  /* Harmonious Natural Color Palette */
-  --primary: #1e3f20;          /* Deep rich forest green */
-  --primary-light: #2e6231;    /* Lighter forest green */
-  --primary-glow: rgba(46, 98, 49, 0.15);
+  /* Premium Glowing Dark Theme Palette */
+  --primary: #1de9b6;          /* Neon Turquoise */
+  --primary-light: #a8e6cf;    /* Mint Green */
+  --primary-glow: rgba(29, 233, 182, 0.15);
   
-  --secondary: #1e3a5f;        /* Soft navy blue */
-  --secondary-light: #2d558a;  /* Bright soft blue */
+  --secondary: #00b0ff;        /* Neon Blue */
+  --secondary-light: #80d8ff;  /* Light Blue */
 
-  --accent: #2e6231;
-  --text-primary: #121814;     /* Extremely dark charcoal green */
-  --text-secondary: #4a554c;   /* Slate gray green */
+  --accent: #1de9b6;
+  --text-primary: #f8f9fa;     /* Crisp Bright Off-White */
+  --text-secondary: #cbd5e1;   /* Elegant Slate Gray */
   
-  --glass-bg: rgba(255, 255, 255, 0.45);
-  --glass-border: rgba(255, 255, 255, 0.6);
-  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+  --glass-bg: rgba(15, 23, 42, 0.45);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4);
   --radius-lg: 24px;
   --radius-md: 16px;
   
-  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 * {
@@ -31,7 +31,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: var(--font-body);
-  background-color: #f4f6f4;
+  background-color: #0f172a;
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -41,7 +41,7 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   font-weight: 700;
-  color: var(--primary);
+  color: #ffffff;
   margin-top: 0;
 }
 
@@ -51,20 +51,20 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f3f1;
+  background: #0f172a;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #c3ccbd;
+  background: #1e293b;
   border-radius: 5px;
+  border: 2px solid #0f172a;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a1b09b;
+  background: #334155;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-

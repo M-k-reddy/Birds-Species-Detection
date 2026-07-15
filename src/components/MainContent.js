@@ -180,7 +180,7 @@ const MainContent = () => {
 
                 {/* Right Side: Beautiful Crisp Bird Background Image */}
                 <div className="right-column">
-                    <div className="hero-bird-image-cover"></div>
+                    <div className="hero-bird-image-cover" style={{ backgroundImage: "url('/hero_bird.jpg')" }}></div>
                 </div>
             </div>
         </div>

@@ -11,9 +11,9 @@
 .about-card {
   width: 100%;
   max-width: 800px;
-  background: rgba(255, 255, 255, 0.45);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
   padding: 48px;
@@ -26,7 +26,7 @@
 .about-card h2 {
   font-size: 32px;
   margin-bottom: 8px;
-  border-bottom: 2px solid rgba(46, 98, 49, 0.15);
+  border-bottom: 2px solid rgba(13, 148, 136, 0.15);
   padding-bottom: 12px;
   align-self: flex-start;
   width: 100%;

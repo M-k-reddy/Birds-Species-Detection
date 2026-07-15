@@ -14,9 +14,9 @@
   --text-primary: #0f172a;     /* Deep Slate Black (High Contrast) */
   --text-secondary: #475569;   /* Slate Gray Body Text */
   
-  --glass-bg: #ffffff;         /* Pure Solid White Card for Maximum Readability */
-  --glass-border: rgba(0, 0, 0, 0.06);
-  --glass-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(0, 0, 0, 0.02);
+  --glass-bg: rgba(255, 255, 255, 0.72);         /* Frosted White Card */
+  --glass-border: rgba(255, 255, 255, 0.55);
+  --glass-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(0, 0, 0, 0.02);
   --radius-lg: 24px;
   --radius-md: 16px;
   

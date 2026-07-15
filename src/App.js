@@ -138,6 +138,9 @@ function App() {
       backgroundAttachment: "fixed",
       backgroundPosition: "center"
     }}>
+      <div className="aurora-glow glow-1"></div>
+      <div className="aurora-glow glow-2"></div>
+      <div className="aurora-glow glow-3"></div>
       <Ui currentSection={currentSection} setCurrentSection={handleSetCurrentSection} />
       <div className="content">
         <MainContent />

@@ -139,7 +139,12 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
+    <div className="App" style={{
+      backgroundImage: "linear-gradient(135deg, rgba(238, 244, 240, 0.85) 0%, rgba(228, 238, 245, 0.9) 100%), url('/webbird.jpg')",
+      backgroundSize: "cover",
+      backgroundAttachment: "fixed",
+      backgroundPosition: "center"
+    }}>
       <Ui currentSection={currentSection} setCurrentSection={handleSetCurrentSection} />
       <div className="content">
         <MainContent />

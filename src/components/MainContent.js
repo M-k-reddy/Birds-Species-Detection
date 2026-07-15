@@ -1,36 +1,64 @@
 import React, { useState } from 'react';
-import { FaDove,  FaCamera, FaImage, FaTimes } from 'react-icons/fa';
+import { FaDove, FaCamera, FaCloudUploadAlt, FaTimes, FaSpinner } from 'react-icons/fa';
 import axios from 'axios';
-import './MainContent.css'; // Assuming you have a CSS file for styling
+import './MainContent.css';
 
 const MainContent = () => {
     const [fileUploaded, setFileUploaded] = useState(false);
     const [species, setSpecies] = useState('');
     const [imageUrl, setImageUrl] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [dragActive, setDragActive] = useState(false);
 
-    const handleFileUpload = async (event) => {
-        if (event.target.files.length > 0) {
-            const file = event.target.files[0];
-            const formData = new FormData();
-            formData.append('image', file);
+    const uploadFile = async (file) => {
+        setLoading(true);
+        const formData = new FormData();
+        formData.append('image', file);
 
-            try {
-                const response = await axios.post('http://localhost:5000/api/upload', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
-                });
-                console.log('Response:', response.data); // Log the response for debugging
-                if (response.data.birds) {
-                    setSpecies(response.data.birds.join(', '));
-                    setImageUrl(response.data.image_url);
-                    setFileUploaded(true);
-                } else {
-                    console.error('No species detected in response:', response.data);
-                }
-            } catch (error) {
-                console.error('Error uploading file:', error);
+        try {
+            const response = await axios.post('http://localhost:5000/api/upload', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            console.log('Response:', response.data);
+            if (response.data.birds) {
+                setSpecies(response.data.birds.join(', '));
+                setImageUrl(response.data.image_url);
+                setFileUploaded(true);
+            } else {
+                console.error('No species detected in response:', response.data);
             }
+        } catch (error) {
+            console.error('Error uploading file:', error);
+            alert('Failed to connect to the backend server. Please make sure the Flask server is running.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleFileUpload = (event) => {
+        if (event.target.files.length > 0) {
+            uploadFile(event.target.files[0]);
+        }
+    };
+
+    const handleDrag = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (e.type === "dragenter" || e.type === "dragover") {
+            setDragActive(true);
+        } else if (e.type === "dragleave") {
+            setDragActive(false);
+        }
+    };
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setDragActive(false);
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+            uploadFile(e.dataTransfer.files[0]);
         }
     };
 
@@ -41,35 +69,85 @@ const MainContent = () => {
     };
 
     return (
-        <>
-            <div className="main-container">
-                <div className="inner-container">
-                    <div className='inner-main-container'>
-                        <p className='inner-container-heading'>All About Birds</p>
-                        <div className='tag-line'>
-                            <p className='inner-container-content'>Detect Species by Image!</p>
-                            <FaDove />
-                            <FaCamera />
+        <div className="home-section" id="home">
+            <div className="hero-container">
+                <div className="hero-text-card">
+                    <span className="badge">AI-Powered Detection</span>
+                    <h1 className="hero-title">All About Birds</h1>
+                    <div className="hero-subtitle-container">
+                        <p className="hero-subtitle">Detect Species by Image</p>
+                        <div className="icons-row">
+                            <FaDove className="icon-bird" />
+                            <FaCamera className="icon-camera" />
                         </div>
-                        <p className='tag-line-2'>"Capturing Birds in Every Frame"</p>
                     </div>
-                    <div className='img-input'>
-                        <label className='centered-label'>
-                            <FaImage className='gallery-img' />
-                            <input type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFileUpload} />
-                        </label>
-                    </div>
+                    <p className="hero-quote">"Capturing Birds in Every Frame"</p>
+                </div>
+
+                <div className="interactive-card">
+                    {!fileUploaded && !loading && (
+                        <div 
+                            className={`upload-zone ${dragActive ? 'drag-active' : ''}`}
+                            onDragEnter={handleDrag}
+                            onDragLeave={handleDrag}
+                            onDragOver={handleDrag}
+                            onDrop={handleDrop}
+                        >
+                            <label className="upload-label">
+                                <FaCloudUploadAlt className="upload-icon" />
+                                <span className="upload-title">Choose a bird image</span>
+                                <span className="upload-desc">or drag and drop it here</span>
+                                <span className="upload-limit">Supports JPG, PNG, WEBP</span>
+                                <input 
+                                    type="file" 
+                                    accept="image/*" 
+                                    style={{ display: 'none' }} 
+                                    onChange={handleFileUpload} 
+                                />
+                            </label>
+                        </div>
+                    )}
+
+                    {loading && (
+                        <div className="loading-card">
+                            <FaSpinner className="spinner-icon" />
+                            <h3>Analyzing Avian Pixels...</h3>
+                            <p>Running local ONNX model classification</p>
+                        </div>
+                    )}
+
+                    {fileUploaded && !loading && (
+                        <div className="result-card">
+                            <div className="result-header">
+                                <h3>Detection Completed</h3>
+                                <button className="close-btn" onClick={handleClose}>
+                                    <FaTimes />
+                                </button>
+                            </div>
+                            
+                            <div className="result-image-wrapper">
+                                {imageUrl && (
+                                    <img 
+                                        src={`http://localhost:5000/${imageUrl}`} 
+                                        alt="Uploaded Bird" 
+                                        className="result-image"
+                                    />
+                                )}
+                            </div>
+
+                            <div className="result-details">
+                                <span className="result-label">Detected Species</span>
+                                <span className="result-value">{species}</span>
+                            </div>
+
+                            <button className="reset-button" onClick={handleClose}>
+                                Identify Another Bird
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
-            {fileUploaded && (
-                <div className='upload-message'>
-                    <FaTimes className='close-icon' onClick={handleClose} />
-                    <p>File has been uploaded successfully!</p>
-                    <p>Detected Species: {species}</p>
-                    {imageUrl && <img src={`http://localhost:5000/${imageUrl}`} alt="Uploaded Bird" style={{ maxWidth: '100%', height: 'auto', maxHeight: '300px', marginBottom: '20px' }} />}
-                </div>
-            )}
-        </>
+        </div>
     );
 };
 

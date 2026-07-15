@@ -3,18 +3,15 @@ import { FaDove, FaCamera, FaCloudUploadAlt, FaTimes, FaSpinner } from 'react-ic
 import axios from 'axios';
 import './MainContent.css';
 
-// Curated list of 10 breathtaking, high-contrast, colorful bird images from Wikipedia's public CDN
+// Curated list of 7 breathtaking, local, high-contrast bird images
 const BIRD_IMAGES = [
-    "/hero_bird.jpg", // Start with our gorgeous generated Cedar Waxwing berry image
-    "https://upload.wikimedia.org/wikipedia/commons/c/cc/Common_kingfisher_Alcedo_atthis.jpg", // Common Kingfisher
-    "https://upload.wikimedia.org/wikipedia/commons/e/e4/Pharomachrus_mocinno_-Costa_Rica-8.jpg", // Resplendent Quetzal
-    "https://upload.wikimedia.org/wikipedia/commons/9/9e/Aix_galericulata_-_Richmond_Park_-_London.jpg", // Mandarin Duck
-    "https://upload.wikimedia.org/wikipedia/commons/c/c4/Puffin_Latrabjarg_Iceland.jpg", // Atlantic Puffin
-    "https://upload.wikimedia.org/wikipedia/commons/c/c5/Peacock_Plumage.jpg", // Indian Peafowl
-    "https://upload.wikimedia.org/wikipedia/commons/5/53/Chrysolophus_pictus_-_Cincinnati_Zoo.jpg", // Golden Pheasant
-    "https://upload.wikimedia.org/wikipedia/commons/5/51/Red-crested_Cardinal_on_Hawaii.jpg", // Red-crested Cardinal
-    "https://upload.wikimedia.org/wikipedia/commons/b/b8/Flickr_-_Koshy_Koshy_-_Flamingos.jpg", // Greater Flamingo
-    "https://upload.wikimedia.org/wikipedia/commons/b/b3/Lilac-breasted_roller_%28Coracias_caudatus%29_crop.jpg" // Lilac-breasted Roller
+    "/hero_bird.jpg",
+    "/philippine_eagle.jpg",
+    "/kakapo.jpg",
+    "/king_of_saxony.jpg",
+    "/marvelous_spatuletail.jpg",
+    "/resplendent_quetzal.jpg",
+    "/ribbon_tailed_astrapia.jpg"
 ];
 
 const MainContent = () => {

@@ -1,13 +1,15 @@
 {
   "files": {
     "main.css": "/Birds-Species-Detection/static/css/main.6fbcabd2.css",
-    "main.js": "/Birds-Species-Detection/static/js/main.ffe906fe.js",
+    "main.js": "/Birds-Species-Detection/static/js/main.4682853a.js",
+    "static/js/373.989b110f.chunk.js": "/Birds-Species-Detection/static/js/373.989b110f.chunk.js",
     "index.html": "/Birds-Species-Detection/index.html",
     "main.6fbcabd2.css.map": "/Birds-Species-Detection/static/css/main.6fbcabd2.css.map",
-    "main.ffe906fe.js.map": "/Birds-Species-Detection/static/js/main.ffe906fe.js.map"
+    "main.4682853a.js.map": "/Birds-Species-Detection/static/js/main.4682853a.js.map",
+    "373.989b110f.chunk.js.map": "/Birds-Species-Detection/static/js/373.989b110f.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.6fbcabd2.css",
-    "static/js/main.ffe906fe.js"
+    "static/js/main.4682853a.js"
   ]
 }

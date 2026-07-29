@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaDove, FaCamera, FaCloudUploadAlt, FaTimes, FaSpinner } from 'react-icons/fa';
-import axios from 'axios';
+import { pipeline, env } from '@huggingface/transformers';
 import './MainContent.css';
 
 // Curated list of 7 breathtaking, local, high-contrast bird images
@@ -14,12 +14,29 @@ const BIRD_IMAGES = [
     "/ribbon_tailed_astrapia.jpg"
 ];
 
+// Module-level cache for the model
+let classifierInstance = null;
+
+const getClassifier = async (onProgress) => {
+    if (!classifierInstance) {
+        env.allowLocalModels = false;
+        classifierInstance = await pipeline('image-classification', 'chriamue/bird-species-classifier', {
+            progress_callback: onProgress,
+        });
+    }
+    return classifierInstance;
+};
+
 const MainContent = () => {
     const [fileUploaded, setFileUploaded] = useState(false);
     const [species, setSpecies] = useState('');
     const [imageUrl, setImageUrl] = useState('');
     const [loading, setLoading] = useState(false);
     const [dragActive, setDragActive] = useState(false);
+
+    // States for model loading progress
+    const [downloadProgress, setDownloadProgress] = useState(0);
+    const [loadingMessage, setLoadingMessage] = useState('');
 
     // States for rotating background bird images
     const [bgIndex, setBgIndex] = useState(0);
@@ -39,26 +56,48 @@ const MainContent = () => {
 
     const uploadFile = async (file) => {
         setLoading(true);
-        const formData = new FormData();
-        formData.append('image', file);
+        setDownloadProgress(0);
+        setLoadingMessage('Loading AI model components...');
+
+        // Create a local URL for the uploaded image so the browser can display it
+        const localUrl = URL.createObjectURL(file);
+        setImageUrl(localUrl);
 
         try {
-            const response = await axios.post('http://localhost:5000/api/upload', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
+            // Lazily get/initialize the classifier pipeline
+            const classifier = await getClassifier((data) => {
+                if (data.status === 'progress') {
+                    setDownloadProgress(Math.round(data.progress));
+                    setLoadingMessage(`Downloading model: ${Math.round(data.progress)}%`);
+                } else if (data.status === 'ready') {
+                    setLoadingMessage('Initializing model weights...');
+                }
             });
-            console.log('Response:', response.data);
-            if (response.data.birds) {
-                setSpecies(response.data.birds.join(', '));
-                setImageUrl(response.data.image_url);
+
+            setLoadingMessage('Analyzing avian features...');
+            
+            // Run inference directly in browser
+            const results = await classifier(localUrl);
+            console.log('Inference Results:', results);
+
+            if (results && results.length > 0) {
+                const topResult = results[0];
+                const speciesName = topResult.label.split(',')[0].trim().toUpperCase();
+                const confidence = topResult.score;
+
+                if (confidence < 0.35) {
+                    setSpecies(`${speciesName} (Low Confidence: ${(confidence * 100).toFixed(1)}% — Try a clearer photo)`);
+                } else {
+                    setSpecies(speciesName);
+                }
                 setFileUploaded(true);
             } else {
-                console.error('No species detected in response:', response.data);
+                setSpecies('Could not identify the species. Please try another photo.');
+                setFileUploaded(true);
             }
         } catch (error) {
-            console.error('Error uploading file:', error);
-            alert('Failed to connect to the backend server. Please make sure the Flask server is running.');
+            console.error('Classification error:', error);
+            alert('Failed to run the bird classifier. Please try again with a different image.');
         } finally {
             setLoading(false);
         }
@@ -101,7 +140,7 @@ const MainContent = () => {
                 {/* Left Side: Content & Actions */}
                 <div className="left-column">
                     <div className="hero-text-content">
-                        <span className="badge">AI-Powered Detection</span>
+                        <span className="badge">Local AI Detection</span>
                         <h1 className="hero-title">All About Birds</h1>
                         <p className="hero-subtitle">Detect Species by Image 🐦 📷</p>
                         <p className="hero-quote">"Capturing Birds in Every Frame"</p>
@@ -134,8 +173,15 @@ const MainContent = () => {
                         {loading && (
                             <div className="loading-card">
                                 <FaSpinner className="spinner-icon" />
-                                <h3>Analyzing Avian Pixels...</h3>
-                                <p>Running local two-stage hybrid model classification</p>
+                                <h3>{loadingMessage}</h3>
+                                {downloadProgress > 0 && downloadProgress <= 100 && (
+                                    <div className="progress-bar-container">
+                                        <div 
+                                            className="progress-bar-fill" 
+                                            style={{ width: `${downloadProgress}%` }}
+                                        ></div>
+                                    </div>
+                                )}
                             </div>
                         )}
 
@@ -151,7 +197,7 @@ const MainContent = () => {
                                 <div className="result-image-wrapper">
                                     {imageUrl && (
                                         <img 
-                                            src={`http://localhost:5000/${imageUrl}`} 
+                                            src={imageUrl} 
                                             alt="Uploaded Bird" 
                                             className="result-image"
                                         />
@@ -183,4 +229,4 @@ const MainContent = () => {
     );
 };
 
-export default MainContent;
+export default MainContent;ntent;

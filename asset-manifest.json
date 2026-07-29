@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/Birds-Species-Detection/static/css/main.6fbcabd2.css",
+    "main.js": "/Birds-Species-Detection/static/js/main.797afab1.js",
+    "index.html": "/Birds-Species-Detection/index.html",
+    "main.6fbcabd2.css.map": "/Birds-Species-Detection/static/css/main.6fbcabd2.css.map",
+    "main.797afab1.js.map": "/Birds-Species-Detection/static/js/main.797afab1.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.6fbcabd2.css",
+    "static/js/main.797afab1.js"
+  ]
+}

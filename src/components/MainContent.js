@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaDove, FaCamera, FaCloudUploadAlt, FaTimes, FaSpinner } from 'react-icons/fa';
-import { pipeline, env } from '@huggingface/transformers';
+import { pipeline, env } from '@xenova/transformers';
 import './MainContent.css';
 
 // Curated list of 7 breathtaking, local, high-contrast bird images

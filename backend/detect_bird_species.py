@@ -114,32 +114,35 @@ def is_image_a_bird(image_path):
 
 def detect_bird_species(image_path):
     """
-    Full offline two-stage pipeline:
-      Stage 1 — MobileNetV2 (ONNX): Is it a bird?
-      Stage 2 — HuggingFace fine-grained: Which species? (525 classes)
-    No API keys or internet required after first model download.
+    Robust two-stage pipeline:
+      1. Run fine-grained 525-species bird classifier.
+      2. If confidence >= 0.40, return species directly (avoids false rejections of rare birds).
+      3. If confidence < 0.40, run MobileNetV2 verification:
+         - If MobileNetV2 detects an obvious non-bird (car, mammal, person, object), reject it.
+         - If MobileNetV2 detects a bird or is uncertain, return species with low confidence notice.
     """
     try:
-        # --- Stage 1: Bird Verification ---
-        is_bird, detected_label = is_image_a_bird(image_path)
-        if not is_bird:
-            print(f"[INFO] Not a bird — detected: {detected_label}")
-            return [f"Not a Bird (Detected: {detected_label})"]
-
-        # --- Stage 2: Fine-grained Species Classification ---
         classifier = get_local_classifier()
-        img = Image.open(image_path)
+        img = Image.open(image_path).convert("RGB")
         results = classifier(img)
 
         if results:
             top = results[0]
-            species    = top["label"].split(",")[0].strip().title()
-            confidence = top["score"]
-            print(f"[INFO] Detected: {species} (confidence: {confidence:.2f})")
+            species = top["label"].split(",")[0].strip().title()
+            confidence = float(top["score"])
+            print(f"[INFO] Avian classifier: {species} (confidence: {confidence:.2f})")
 
-            if confidence < 0.35:
-                return [f"{species} (Low Confidence: {confidence * 100:.1f}% — Try a clearer, centered photo)"]
-            return [species]
+            # High confidence bird species match
+            if confidence >= 0.40:
+                return [species]
+
+            # Ambiguous match: check MobileNetV2 to see if it's a non-bird object/animal
+            is_bird, detected_label = is_image_a_bird(image_path)
+            if not is_bird:
+                print(f"[INFO] Rejected non-bird — detected: {detected_label} (bird score: {confidence:.2f})")
+                return [f"Not a Bird (Detected: {detected_label})"]
+
+            return [f"{species} (Low Confidence: {confidence * 100:.1f}% — Try a clearer, centered photo)"]
 
     except Exception as e:
         print(f"[ERROR] Classification failed: {e}")

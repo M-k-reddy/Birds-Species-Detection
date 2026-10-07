@@ -32,7 +32,7 @@ function Ui({ currentSection, setCurrentSection }) {
   return (
     <nav className="navbar">
       <span className="logo" onClick={() => setCurrentSection('home')} style={{ cursor: 'pointer' }}>
-        <img src="/birdlogo.png" alt="Bird Logo" />
+        <img src={`${process.env.PUBLIC_URL || ''}/birdlogo.png`} alt="Bird Logo" />
         <p className='title'>Bird Species Detector</p>
       </span>
       <ul className="nav-links">

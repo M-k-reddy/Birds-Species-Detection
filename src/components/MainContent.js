@@ -1,31 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { FaDove, FaCamera, FaCloudUploadAlt, FaTimes, FaSpinner } from 'react-icons/fa';
-import { pipeline, env } from '@xenova/transformers';
+import axios from 'axios';
 import './MainContent.css';
 
 // Curated list of 7 breathtaking, local, high-contrast bird images
+const PUBLIC_PREFIX = process.env.PUBLIC_URL || '';
 const BIRD_IMAGES = [
-    "/hero_bird.jpg",
-    "/philippine_eagle.jpg",
-    "/kakapo.jpg",
-    "/king_of_saxony.jpg",
-    "/marvelous_spatuletail.jpg",
-    "/resplendent_quetzal.jpg",
-    "/ribbon_tailed_astrapia.jpg"
+    `${PUBLIC_PREFIX}/hero_bird.jpg`,
+    `${PUBLIC_PREFIX}/philippine_eagle.jpg`,
+    `${PUBLIC_PREFIX}/kakapo.jpg`,
+    `${PUBLIC_PREFIX}/king_of_saxony.jpg`,
+    `${PUBLIC_PREFIX}/marvelous_spatuletail.jpg`,
+    `${PUBLIC_PREFIX}/resplendent_quetzal.jpg`,
+    `${PUBLIC_PREFIX}/ribbon_tailed_astrapia.jpg`
 ];
-
-// Module-level cache for the model
-let classifierInstance = null;
-
-const getClassifier = async (onProgress) => {
-    if (!classifierInstance) {
-        env.allowLocalModels = false;
-        classifierInstance = await pipeline('image-classification', 'chriamue/bird-species-classifier', {
-            progress_callback: onProgress,
-        });
-    }
-    return classifierInstance;
-};
 
 const MainContent = () => {
     const [fileUploaded, setFileUploaded] = useState(false);
@@ -33,10 +21,7 @@ const MainContent = () => {
     const [imageUrl, setImageUrl] = useState('');
     const [loading, setLoading] = useState(false);
     const [dragActive, setDragActive] = useState(false);
-
-    // States for model loading progress
-    const [downloadProgress, setDownloadProgress] = useState(0);
-    const [loadingMessage, setLoadingMessage] = useState('');
+    const [loadingMessage, setLoadingMessage] = useState('Analyzing avian features...');
 
     // States for rotating background bird images
     const [bgIndex, setBgIndex] = useState(0);
@@ -56,39 +41,27 @@ const MainContent = () => {
 
     const uploadFile = async (file) => {
         setLoading(true);
-        setDownloadProgress(0);
-        setLoadingMessage('Loading AI model components...');
+        setLoadingMessage('Analyzing avian features with two-stage AI...');
 
-        // Create a local URL for the uploaded image so the browser can display it
+        // Create a local preview immediately for fast UX
         const localUrl = URL.createObjectURL(file);
         setImageUrl(localUrl);
 
+        const formData = new FormData();
+        formData.append('image', file);
+
         try {
-            // Lazily get/initialize the classifier pipeline
-            const classifier = await getClassifier((data) => {
-                if (data.status === 'progress') {
-                    setDownloadProgress(Math.round(data.progress));
-                    setLoadingMessage(`Downloading model: ${Math.round(data.progress)}%`);
-                } else if (data.status === 'ready') {
-                    setLoadingMessage('Initializing model weights...');
-                }
+            const response = await axios.post('/api/upload', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
             });
 
-            setLoadingMessage('Analyzing avian features...');
-            
-            // Run inference directly in browser
-            const results = await classifier(localUrl);
-            console.log('Inference Results:', results);
-
-            if (results && results.length > 0) {
-                const topResult = results[0];
-                const speciesName = topResult.label.split(',')[0].trim().toUpperCase();
-                const confidence = topResult.score;
-
-                if (confidence < 0.35) {
-                    setSpecies(`${speciesName} (Low Confidence: ${(confidence * 100).toFixed(1)}% — Try a clearer photo)`);
-                } else {
-                    setSpecies(speciesName);
+            if (response.data && response.data.birds && response.data.birds.length > 0) {
+                const detectedSpecies = response.data.birds.join(', ');
+                setSpecies(detectedSpecies);
+                if (response.data.image_url) {
+                    setImageUrl(response.data.image_url);
                 }
                 setFileUploaded(true);
             } else {
@@ -97,7 +70,7 @@ const MainContent = () => {
             }
         } catch (error) {
             console.error('Classification error:', error);
-            alert('Failed to run the bird classifier. Please try again with a different image.');
+            alert('Failed to analyze the bird image. Please ensure the server is running and try again.');
         } finally {
             setLoading(false);
         }
@@ -140,7 +113,7 @@ const MainContent = () => {
                 {/* Left Side: Content & Actions */}
                 <div className="left-column">
                     <div className="hero-text-content">
-                        <span className="badge">Local AI Detection</span>
+                        <span className="badge">Two-Stage AI Detection</span>
                         <h1 className="hero-title">All About Birds</h1>
                         <p className="hero-subtitle">Detect Species by Image 🐦 📷</p>
                         <p className="hero-quote">"Capturing Birds in Every Frame"</p>
@@ -174,14 +147,9 @@ const MainContent = () => {
                             <div className="loading-card">
                                 <FaSpinner className="spinner-icon" />
                                 <h3>{loadingMessage}</h3>
-                                {downloadProgress > 0 && downloadProgress <= 100 && (
-                                    <div className="progress-bar-container">
-                                        <div 
-                                            className="progress-bar-fill" 
-                                            style={{ width: `${downloadProgress}%` }}
-                                        ></div>
-                                    </div>
-                                )}
+                                <p style={{ color: 'var(--text-secondary, #666)', fontSize: '0.9rem', marginTop: '0.5rem' }}>
+                                    Running MobileNetV2 verification & 525-species neural classification
+                                </p>
                             </div>
                         )}
 

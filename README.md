@@ -94,6 +94,36 @@ The application UI will open at **http://localhost:3000**
 
 ---
 
+### 🐳 4. Run with Docker (All-in-One Container)
+
+You can build and run both the frontend and backend in a single optimized container:
+
+```bash
+docker build -t bird-species-detector .
+docker run -p 8080:8080 bird-species-detector
+```
+
+Open your browser at **http://localhost:8080**
+
+---
+
+### ☁️ 5. Deploy to Google Cloud Run
+
+Deploy directly to Google Cloud Run in a single command:
+
+```bash
+gcloud run deploy bird-species-detector \
+  --source . \
+  --region us-central1 \
+  --allow-unauthenticated \
+  --memory 2Gi \
+  --cpu 1
+```
+
+Cloud Run will automatically build the multi-stage Docker container in the cloud and return your live public HTTPS URL!
+
+---
+
 ## 📂 Project Structure
 
 ```

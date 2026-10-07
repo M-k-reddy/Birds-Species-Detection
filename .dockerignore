@@ -1,0 +1,17 @@
+node_modules
+.git
+.github
+build
+.venv
+venv
+ENV
+env
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.log
+.DS_Store
+Thumbs.db
+backend/static/uploads/*
+!backend/static/uploads/.gitkeep

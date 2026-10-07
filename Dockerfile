@@ -4,11 +4,11 @@
 FROM node:20-alpine AS frontend-builder
 WORKDIR /app
 
-# Install dependencies
+# Copy package descriptors and install
 COPY package*.json ./
-RUN npm ci || npm install
+RUN npm install
 
-# Build static assets
+# Copy source and build static bundle
 COPY public/ ./public/
 COPY src/ ./src/
 ENV PUBLIC_URL=/
@@ -20,19 +20,16 @@ RUN npm run build
 FROM python:3.10-slim
 WORKDIR /app
 
-# Install curl for container health checks
+# Install curl for health checks
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install PyTorch CPU first to avoid heavy GPU dependencies
-RUN pip install --no-cache-dir torch==2.5.0 --index-url https://download.pytorch.org/whl/cpu
-
-# Copy requirements and install Python dependencies
+# Copy requirements and install CPU PyTorch & Python dependencies
 COPY backend/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy backend code
+# Copy backend files
 COPY backend/ ./backend/
 
 # Copy compiled React frontend from Stage 1
@@ -48,5 +45,5 @@ ENV PYTHONUNBUFFERED=1
 
 EXPOSE 8080
 
-# Run Gunicorn with shell expansion for Cloud Run dynamic PORT
+# Run Gunicorn with dynamic PORT expansion
 CMD exec gunicorn --bind 0.0.0.0:${PORT:-8080} --workers 1 --threads 4 --timeout 120 --chdir backend app:app
